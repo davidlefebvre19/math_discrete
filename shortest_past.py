@@ -7,8 +7,8 @@ algo = 0
 
 
 def Djisktra(arr):
-    return
-
+    path = np.zeros(len(arr), dtype=int)
+    path.fill(10**12)
 
 def Bellman_Ford(arr):
     return
