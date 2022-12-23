@@ -29,7 +29,15 @@ def Bellman_Ford(arr):
 
 
 def Floyd_Warshall(arr):
-    return
+    matrix = np.asmatrix(arr)
+    g = np.array(matrix)
+    nodes = len(arr)
+    for k in range(nodes):
+        for i in range(nodes):
+            for j in range(nodes):
+                g[i][j] = min(g[i][j], g[i][k] + g[k][j])
+    m_g = np.asmatrix(g)
+    return m_g
 
 
 if __name__ == '__main__':
