@@ -5,46 +5,35 @@ import heapq
 
 matrix = None
 algo = 0
-INFINITY = float("inf")
+def Djisktra(arr):
+    nb_nodes = len(arr)
+    result_matrix = []
+    for i in range(nb_nodes):
+        shortest_dist = sten(i, arr)
+        #print(type(shortest_dist))
+        result_matrix.append(shortest_dist)
+    print(type(result_matrix))
+    return result_matrix
 
-def Djisktra(graph):
-    global nb_nodes
-    nb_nodes = len(graph)
-
-    shortest_dists = np.zeros(shape = (nb_nodes, nb_nodes))
-    for i in range(len(graph)):
-        shortest_dists[i] = compute_dijkstra_from_src(graph, i)
-
-    return shortest_dists
-
-def compute_dijkstra_from_src(graph, src):
-    dists = [INFINITY] * nb_nodes
-    dists[src] = 0
-    marked = [False] * nb_nodes
-
-    n = 0
-    while n < nb_nodes:
-        x = get_min_dist_index(dists, marked)
-        marked[x] = True
-
-        for y in range(nb_nodes):
-            if graph[x][y] > 0 and not marked[y] and dists[y] > dists[x] + graph[x][y]:
-                dists[y] = dists[x] + graph[x][y]
-
-        n += 1
-    return dists
-
-def get_min_dist_index(dists, marked):
-    val_min = INFINITY
-    index_min = 0
-
-    for v in range(nb_nodes):
-        if dists[v] < val_min and not marked[v]:
-            val_min = dists[v]
-            index_min = v
-
-    return index_min
-
+def sten(source, adjacence_matrix):
+    stnd = np.zeros(len(adjacence_matrix), dtype="int")
+    stnd.fill(10**12)
+    visited_nodes = np.zeros(len(adjacence_matrix), dtype="int")
+    stnd[source]  = 0
+    iter = 0
+    while iter < len(arr):
+        next_node = 0
+        heap = []
+        for i in range(len(arr)):
+            if visited_nodes[i] == 0:
+                heapq.heappush(heap,(stnd[i], i))
+        next_node = heapq.heappop(heap)[1]
+        visited_nodes[next_node] = 1
+        for i in range(len(adjacence_matrix)):
+            if not visited_nodes[i] and stnd[i] != 0 and stnd[i] > stnd[next_node] + adjacence_matrix[next_node][i]:
+                stnd[i] = stnd[next_node] + adjacence_matrix[next_node][i]
+        iter+=1
+    return stnd.tolist()
 
 def Bellman_Ford(arr):
     distance = np.zeros((len(arr), len(arr)))  # initialisation de la matrice D à zero partout
@@ -59,6 +48,7 @@ def Bellman_Ford(arr):
                 for neighbour in range(len(arr)):
                     # si la distance entre le nœud et le voisin est plus faible que celle actuelle, la remplacer
                     distance[source, neighbour] = min(distance[source, neighbour], distance[source, node] + arr[node, neighbour])
+
     return distance.astype(int)
 
 
