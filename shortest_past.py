@@ -59,28 +59,22 @@ def Bellman_Ford(arr):
                 for neighbour in range(len(arr)):
                     # si la distance entre le nœud et le voisin est plus faible que celle actuelle, la remplacer
                     distance[source, neighbour] = min(distance[source, neighbour], distance[source, node] + arr[node, neighbour])
-
-    print(type(distance))
     return distance.astype(int)
 
 
-def Floyd_Warshall(arr):
-    matrix = np.asmatrix(arr)
-    g = np.array(matrix)
-    nodes = len(arr)
-    for k in range(nodes):
-        for i in range(nodes):
-            for j in range(nodes):
-                g[i][j] = min(g[i][j], g[i][k] + g[k][j])
-    m_g = np.asmatrix(g)
-    return m_g.astype(int)
+def Floyd_Warshall(c: np.matrix):
+    g = np.array(c) # convertir la matrice c en un np.array
+    nodes = len(c) # récupérer la taille d'une ligne pour pouvoir boucler
+    for k in range(nodes): # permettra de comparer un chemin i -> j avec un chemin i -> j -> k
+        for i in range(nodes):  # source
+            for j in range(nodes): # destination
+                g[i][j] = min(g[i][j], g[i][k] + g[k][j]) # on garde le coût minimum entre le coût du chemin actuel (i,j) et celui passant par k en intermédiaire
+    return g.astype(int) # return la matrice de distance g
 
 
 if __name__ == '__main__':
-    #arr = np.genfromtxt(sys.argv[1], delimiter=",", dtype=float)
     arr = np.loadtxt('data.csv', delimiter=",")
-    #convertir np.array en np.matrix pour respecter la signature
-    print(arr)
+    matrix_g = np.asmatrix(arr) #convertir np.array en np.matrix pour respecter la signature
     print("By default, the shortest path of every pair will be calculated using Djisktra, Bellman-Ford and "
           "Floyd_Warshall")
 
@@ -89,4 +83,4 @@ if __name__ == '__main__':
     print("Bellman_Ford algorithm array :")
     print(Bellman_Ford(arr))
     print("Floyd_Warshall algorithm array :")
-    print(Floyd_Warshall(arr))
+    print(Floyd_Warshall(matrix_g))
