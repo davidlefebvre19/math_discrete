@@ -60,6 +60,7 @@ def Bellman_Ford(arr):
                     # si la distance entre le nœud et le voisin est plus faible que celle actuelle, la remplacer
                     distance[source, neighbour] = min(distance[source, neighbour], distance[source, node] + arr[node, neighbour])
 
+    print(type(distance))
     return distance.astype(int)
 
 
@@ -72,30 +73,20 @@ def Floyd_Warshall(arr):
             for j in range(nodes):
                 g[i][j] = min(g[i][j], g[i][k] + g[k][j])
     m_g = np.asmatrix(g)
-    return m_g
+    return m_g.astype(int)
 
 
 if __name__ == '__main__':
-    n = len(sys.argv)
-    if n < 2:
-        print("Please insert the path of the adjacency matrix as an argument")
-        sys.exit("Program end")
-    print("Adjacency matrix path: " + sys.argv[1])
-    arr = np.genfromtxt(sys.argv[1], delimiter=",", dtype=float)
-    #arr = np.loadtxt(sys.argv[1], delimiter=",")
+    #arr = np.genfromtxt(sys.argv[1], delimiter=",", dtype=float)
+    arr = np.loadtxt('data.csv', delimiter=",")
+    #convertir np.array en np.matrix pour respecter la signature
     print(arr)
     print("By default, the shortest path of every pair will be calculated using Djisktra, Bellman-Ford and "
           "Floyd_Warshall")
-    try:
-        if n == 3:
-            Djisktra(arr)
-        else:
-            print("Djiskstra algorithm array :")
-            print(Djisktra(arr))
-            print("Bellman_Ford algorithm array :")
-            print(Bellman_Ford(arr))
-            print("Floyd_Warshall algorithm array :")
-            print(Floyd_Warshall(arr))
-        print("Shortest path computation done !")
-    except:
-        print("Shortest path computation error !")
+
+    print("Djiskstra algorithm array :")
+    print(Djisktra(arr))
+    print("Bellman_Ford algorithm array :")
+    print(Bellman_Ford(arr))
+    print("Floyd_Warshall algorithm array :")
+    print(Floyd_Warshall(arr))
