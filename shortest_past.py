@@ -4,11 +4,61 @@ import os
 
 matrix = None
 algo = 0
+INFINITY = float("inf")
 
+def Djisktra(graph):
+    global nb_nodes
+    nb_nodes = len(graph)
 
-def Djisktra(arr):
-    path = np.zeros(len(arr), dtype=int)
-    path.fill(10**12)
+    shortest_dists = np.zeros(shape = (nb_nodes, nb_nodes))
+    for i in range(len(graph)):
+        shortest_dists[i] = compute_dijkstra_from_src(graph, i)
+
+    return shortest_dists
+
+def compute_dijkstra_from_src(graph, src):
+    """
+    Computes the dijkstra algorithm on a graph, it computes all the shortest path from
+    a source to all the other nodes of the graph and returns an array with the minimal distances.
+    :param graph: 2D array : Matrix of costs representing the graph.
+    :param src: Index of the node from which we want to compute all the shortest distances
+    to the other nodes.
+    :return: 1D array containing the computed shortest distances from the source to all the other nodes
+    """
+    dists = [INFINITY] * nb_nodes
+    dists[src] = 0
+    marked = [False] * nb_nodes
+
+    n = 0
+    while n < nb_nodes:
+        x = get_min_dist_index(dists, marked)
+        marked[x] = True
+
+        for y in range(nb_nodes):
+            if graph[x][y] > 0 and not marked[y] and dists[y] > dists[x] + graph[x][y]:
+                dists[y] = dists[x] + graph[x][y]
+
+        n += 1
+
+    return dists
+
+def get_min_dist_index(dists, marked):
+    """
+    This method works like a poll in an index priority queue, it returns the index of
+    the node with the minimal distance.
+    :param dists: Array of values representing the current distance of a node from the source.
+    :param marked: Array of booleans representing the nodes that are already visited.
+    :return: The index of the node with the minimal distance, the closest node.
+    """
+    val_min = INFINITY
+    index_min = 0
+
+    for v in range(nb_nodes):
+        if dists[v] < val_min and not marked[v]:
+            val_min = dists[v]
+            index_min = v
+
+    return index_min
 
 def Bellman_Ford(arr):
     distance = np.matrix(np.zeros((len(arr), len(arr))))  # initialisation de la matrice D à zero partout
@@ -36,7 +86,7 @@ if __name__ == '__main__':
         print("Please insert the path of the adjacency matrix as an argument")
         sys.exit("Program end")
     print("Adjacency matrix path: " + sys.argv[1])
-    arr = np.loadtxt(sys.argv[1], delimiter=",", dtype=float)
+    arr = np.genfromtxt(sys.argv[1], delimiter=",", dtype=float)
     print(arr)
     print("By default, the shortest path of every pair will be calculated using Djisktra, Bellman-Ford and "
           "Floyd_Warshall")
