@@ -7,12 +7,13 @@ matrix = None
 algo = 0
 def Djisktra(arr):
     nb_nodes = len(arr)
-    result_matrix = []
+    result_matrix = np.zeros(len(arr), dtype=object)  # initialisation de la matrice D à zero partout
     for i in range(nb_nodes):
         shortest_dist = sten(i, arr)
         #print(type(shortest_dist))
-        result_matrix.append(shortest_dist)
+        result_matrix[i] = np.matrix(shortest_dist)
     print(type(result_matrix))
+    print(type(result_matrix[0]))
     return result_matrix
 
 def sten(source, adjacence_matrix):
@@ -33,7 +34,7 @@ def sten(source, adjacence_matrix):
             if not visited_nodes[i] and stnd[i] != 0 and stnd[i] > stnd[next_node] + adjacence_matrix[next_node][i]:
                 stnd[i] = stnd[next_node] + adjacence_matrix[next_node][i]
         iter+=1
-    return stnd.tolist()
+    return stnd
 
 def Bellman_Ford(arr):
     distance = np.zeros((len(arr), len(arr)))  # initialisation de la matrice D à zero partout
@@ -48,7 +49,7 @@ def Bellman_Ford(arr):
                 for neighbour in range(len(arr)):
                     # si la distance entre le nœud et le voisin est plus faible que celle actuelle, la remplacer
                     distance[source, neighbour] = min(distance[source, neighbour], distance[source, node] + arr[node, neighbour])
-
+    print(type(distance[0]))
     return distance.astype(int)
 
 
